@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String    @id @default(uuid())
+  name       String
+  email      String?
+  birthDate  DateTime?
+  id8        BigInt
+  password   String
+  isActive   Boolean
+  // Relations
+  Rotation   Rotation? @relation("rotationSponsor")
+  rotation   Rotation  @relation(fields: [rotationId], references: [id], name: "userRotation")
+  rotationId Int
+  userRole   Role      @relation(fields: [userRoleId], references: [id])
+  userRoleId Int
+  // Timestamps
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Rotation {
+  id              Int      @id @default(autoincrement())
+  name            String
+  startTime       String
+  endTime         String
+  isActive        Boolean  @default(true)
+  // Relations
+  rotationSponsor User     @relation(fields: [sponsorId], references: [id], name: "rotationSponsor")
+  sponsorId       String   @unique
+  User            User[]   @relation("userRotation")
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String
+  isActive  Boolean  @default(true)
+  // Relations
+  User      User[]
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

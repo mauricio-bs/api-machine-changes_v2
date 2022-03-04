@@ -1,0 +1,17 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# production
+/build
+
+# Tests
+__test__/coverage
+.vscode
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.env
